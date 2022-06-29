@@ -7,8 +7,9 @@ const ObjectId = require('mongoose').Types.ObjectId;
 let createIntern = async function (req, res) {
       try {
             data = req.body
+
             // Destructure The Object In body
-            let { name, email, mobile, isDeleted, collegeId } = data
+            let { name, email, mobile, isDeleted, collegeName } = data
 
             // check required property is present or Not ?
             if (!Object.keys(data).length)
@@ -16,14 +17,12 @@ let createIntern = async function (req, res) {
             if (!name) return res.status(400).send({ status: false, message: "Missing Name" })
             if (!email) return res.status(400).send({ status: false, message: "Missing email" })
             if (!mobile) return res.status(400).send({ status: false, message: "Missing mobile" })
-            if (!collegeId) return res.status(400).send({ status: false, message: "Missing collegeId" })
+            //if (!collegeId) return res.status(400).send({ status: false, message: "Missing collegeId" })
+
 
             // check if input is Valid or Not ?
-            var regEx = /^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/
-
-              
-
-            if (!regEx.test(name)) {    
+            var regEx = /^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$/
+            if (!regEx.test(name)) {
                   return res.status(400).send({ status: false, message: "name is invalid" });
             }
 
@@ -36,12 +35,13 @@ let createIntern = async function (req, res) {
                   return res.status(400).send({ status: false, message: "Mobile Number is invalid" });
             }
 
-            //check the college Id is Valid or Not ?
-            if (!ObjectId.isValid(collegeId)) {
-                  return res.status(400).send({ status: false, message: " collegeId is Invalid" });
-            }
+            // //check the college Id is Valid or Not ?
+            // if (!ObjectId.isValid(collegeId)) {
+            //       return res.status(400).send({ status: false, message: " collegeId is Invalid" });
+            // }
+
             //check if isDeleted is TRUE/FALSE ?
-            if (isDeleted &&(isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
+            if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
                   return res.status(400).send({ status: false, message: "isDeleted Must be TRUE OR FALSE" });
             }
 
@@ -54,8 +54,13 @@ let createIntern = async function (req, res) {
             if (findMobile) return res.status(400).send({ status: false, message: '  Mobile No is already used....' })
 
             //check if college id is present in Db or not ?
-            findCollegeID = await collegeModel.findOne({collegeId:collegeId,isDeleted:false})
-            if (!findCollegeID) return res.status(400).send({ status: false, message: "Entered College Id or college is Not Present in DB" })
+            // findCollegeID = await collegeModel.findOne({collegeId:collegeId,isDeleted:false})
+
+            findCollege = await collegeModel.findOne({ name: collegeName, isDeleted: false })
+
+            if (!findCollege) return res.status(404).send({ status: false, message: "Entered college is Not present in DB" })
+            data.collegeId = (findCollege._id).toString()
+
 
             // load the data in DB
             let internData = await internModel.create(data)

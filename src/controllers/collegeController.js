@@ -58,12 +58,12 @@ let getcollegeDetails = async function (req, res) {
 
             // if collegeName Is Present
             let collegeData = await collageModel.findOne({ name: collegeName, isDeleted: false })
-            console.log(collegeData)
+          
             if (!collegeData) return res.status(404).send({ status: false, message: "College Not Found" });
 
             // is there store college Id
             collegedId = (collegeData._id).toString()
-            console.log(collegedId)
+           
 
             // get All Intern detail(name,email,mobile)
             let internData = await internModel.find({ collegeId: collegedId, isDeleted: false }).select("name email mobile")
