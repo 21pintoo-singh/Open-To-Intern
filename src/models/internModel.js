@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
-const validator = require('validator')
 
 const internSchema = new mongoose.Schema({
  
