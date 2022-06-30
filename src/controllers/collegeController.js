@@ -7,7 +7,7 @@ const internModel = require('../models/internModel')
 let createCollage = async function (req, res) {
       try {
             const data = req.body;
-
+            
             // destructure college data
             let { name, fullName, logoLink, isDeleted, ...rest } = data
             if (!Object.keys(data).length) return res.status(400).send({ status: false, message: "pls enter the data in body" })

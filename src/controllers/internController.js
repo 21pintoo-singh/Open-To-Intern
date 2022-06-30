@@ -1,7 +1,6 @@
 const internModel = require("../models/internModel")
 const collegeModel = require('../models/collegeModel')
 const emailValid = require("email-validator")
-const ObjectId = require('mongoose').Types.ObjectId;
 
 // -----------------------------------------createIntern Data------------------------------------
 let createIntern = async function (req, res) {
@@ -27,6 +26,9 @@ let createIntern = async function (req, res) {
             //validate the intern email
             if (!email) return res.status(400).send({ status: false, message: "Missing email" })
 
+            // check email is valid or not?
+            if (!emailValid.validate(email)) { return res.status(400).send({ status: false, message: "email id is invalid" }) };
+
             //validate the intern mobile
             if (!mobile) return res.status(400).send({ status: false, message: "Missing mobile" })
 
@@ -35,9 +37,6 @@ let createIntern = async function (req, res) {
             if (!regexMobile.test(mobile)) {
                   return res.status(400).send({ status: false, message: "Mobile Number is invalid" });
             }
-
-            // check email is valid or not?
-            if (!emailValid.validate(email)) { return res.status(400).send({ status: false, message: "email id is invalid" }) };
 
             //check if isDeleted is TRUE/FALSE ?
             if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
@@ -54,7 +53,6 @@ let createIntern = async function (req, res) {
 
             //check if college name is present in Db or not ?
             findCollege = await collegeModel.findOne({ name: collegeName, isDeleted: false })
-
             if (!findCollege) return res.status(404).send({ status: false, message: "Entered college is Not present in DB" })
             data.collegeId = (findCollege._id).toString()
 
