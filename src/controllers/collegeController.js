@@ -7,7 +7,7 @@ const internModel = require('../models/internModel')
 let createCollage = async function (req, res) {
       try {
             const data = req.body;
-            
+
             // destructure college data
             let { name, fullName, logoLink, isDeleted, ...rest } = data
             if (!Object.keys(data).length) return res.status(400).send({ status: false, message: "pls enter the data in body" })
@@ -28,6 +28,12 @@ let createCollage = async function (req, res) {
             //Check if college full name present or not?
             if (!fullName) return res.status(400).send({ status: false, message: "Fullname is Missing" })
 
+            //Check if fullName Is Vilid or Not?
+            var regEex = /[a-z]+/;
+            if (!regEex.test(fullName)) {
+                  return res.status(400).send({ status: false, message: "fullName is invalid" });
+            }
+
             //Check if college logoLink present or not?
             if (!logoLink) return res.status(400).send({ status: false, message: "LogoLink is Missing" })
 
@@ -40,6 +46,8 @@ let createCollage = async function (req, res) {
             if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
                   return res.status(400).send({ status: false, message: "isDeleted Must be TRUE OR FALSE" });
             }
+            if (isDeleted)
+            return res.status(400).send({ status: false, message: "you can not set isdeleted True" });
 
             //if college name is already present In DB or Not!
             const findName = await collageModel.findOne({ name: name })

@@ -10,8 +10,8 @@ router.post('/functionup/interns', internController.createIntern)
 router.get('/functionup/collegeDetails', collegeController.getcollegeDetails)
 
 // validation of url
-router.all('/:y/', (req, res)=>res.status(400).send({status:false,msg:"invaild request"}));
-router.all('/:y/:x', (req, res)=>res.status(400).send({status:false,msg:"invaild request"}));
+router.all('/:y/', (req, res)=>res.status(400).send({status:false,message:"invaild request"}));
+router.all('/:y/:x', (req, res)=>res.status(400).send({status:false,message:"invaild request"}));
   
 
 module.exports = router;

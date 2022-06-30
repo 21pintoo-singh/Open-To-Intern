@@ -42,6 +42,8 @@ let createIntern = async function (req, res) {
             if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
                   return res.status(400).send({ status: false, message: "isDeleted Must be TRUE OR FALSE" });
             }
+            if (isDeleted)
+            return res.status(400).send({ status: false, message: "you can not set isdeleted True" });
 
             //check id email is already in db or not ?
             findEmail = await internModel.findOne({ email: email })
