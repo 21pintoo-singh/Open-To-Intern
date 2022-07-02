@@ -1,5 +1,3 @@
-const { rest } = require("lodash");
-const { object } = require("webidl-conversions");
 const collageModel = require("../models/collegeModel")
 const internModel = require('../models/internModel')
 
